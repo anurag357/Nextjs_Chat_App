@@ -82,16 +82,14 @@ const ChatInterface = ({ uploadedItems }) => {
           messages.map((message, index) => (
             <div
               key={index}
-              className={`flex ${
-                message.role === "user" ? "justify-end" : "justify-start"
-              }`}
+              className={`flex ${message.role === "user" ? "justify-end" : "justify-start"
+                }`}
             >
               <div
-                className={`max-w-xs md:max-w-md lg:max-w-lg xl:max-w-xl rounded-lg px-4 py-2 shadow-sm ${
-                  message.role === "user"
+                className={`max-w-xs md:max-w-md lg:max-w-lg xl:max-w-xl rounded-lg px-4 py-2 shadow-sm ${message.role === "user"
                     ? "bg-indigo-600 text-white"
                     : "bg-white text-gray-800 border border-gray-200"
-                }`}
+                  }`}
               >
                 {message.content}
               </div>
@@ -112,18 +110,21 @@ const ChatInterface = ({ uploadedItems }) => {
       </div>
 
       {/* Input */}
-      <form onSubmit={handleSubmit} className="border-t p-3 flex">
+      <form
+        onSubmit={handleSubmit}
+        className="border-t p-3 flex flex-col sm:flex-row gap-2"
+      >
         <input
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Ask me anything about your documents..."
-          className="flex-1 border border-gray-300 rounded-l-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+          className="flex-1 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
           disabled={isLoading || uploadedItems.length === 0}
         />
         <button
           type="submit"
-          className="bg-indigo-600 text-white px-5 py-2 rounded-r-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-50"
+          className="bg-indigo-600 text-white px-5 py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-50 w-full sm:w-auto"
           disabled={!input.trim() || isLoading || uploadedItems.length === 0}
         >
           Send

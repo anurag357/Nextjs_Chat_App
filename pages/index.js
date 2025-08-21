@@ -119,7 +119,7 @@ export default function Home() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
             </svg>
           </button>
-          <h1 className="text-lg font-semibold text-gray-900">ChaiDocChat</h1>
+          <h1 className="text-lg font-semibold text-gray-900">AI Assistant for Your Documents</h1>
           <div className="w-9" />
         </div>
       </div>
