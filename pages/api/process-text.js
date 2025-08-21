@@ -2,8 +2,8 @@ import { QdrantClient } from '@qdrant/js-client-rest';
 import { OpenAIEmbeddings } from "@langchain/openai";
 
 const qdrantClient = new QdrantClient({
-  host: process.env.QDRANT_HOST || 'localhost',
-  port: process.env.QDRANT_PORT || 6333,
+  url: process.env.QDRANT_URL || "http://localhost:6333",
+  apiKey: process.env.QDRANT_API_KEY, // optional if local
 });
 
 const embeddings = new OpenAIEmbeddings({
