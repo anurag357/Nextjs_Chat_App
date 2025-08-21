@@ -3,15 +3,14 @@ import pdf from "pdf-parse";
 import mammoth from "mammoth"; // for DOCX text extraction
 import { QdrantClient } from "@qdrant/js-client-rest";
 import { OpenAIEmbeddings } from "@langchain/openai";
-import formidable from "formidable";
 import fs from "fs";
-
 
 export const config = {
   api: {
     bodyParser: false,
   },
 };
+
 // --- Setup Qdrant Client ---
 const qdrantClient = new QdrantClient({
   url: process.env.QDRANT_URL || "http://localhost:6333",
@@ -22,10 +21,14 @@ const qdrantClient = new QdrantClient({
 const embeddings = new OpenAIEmbeddings({
   openAIApiKey: process.env.OPENAI_API_KEY,
 });
+
 // --- Helper: Parse Formidable as Promise ---
 function parseForm(req) {
   return new Promise((resolve, reject) => {
-    const form = new IncomingForm({ keepExtensions: true });
+    const form = new IncomingForm({
+      keepExtensions: true,
+      uploadDir: "/tmp", // ✅ Vercel-safe temp dir
+    });
     form.parse(req, (err, fields, files) => {
       if (err) reject(err);
       else resolve({ fields, files });
@@ -76,7 +79,10 @@ export default async function handler(req, res) {
     for (const file of fileArray) {
       try {
         let text = "";
-        const fileExtension = file.originalFilename.split(".").pop().toLowerCase();
+        const fileExtension = file.originalFilename
+          .split(".")
+          .pop()
+          .toLowerCase();
 
         // --- Extract text depending on file type ---
         if (fileExtension === "pdf") {
@@ -85,7 +91,7 @@ export default async function handler(req, res) {
           text = data.text;
         } else if (["txt", "md"].includes(fileExtension)) {
           text = await fs.promises.readFile(file.filepath, "utf8");
-        } else if (["docx"].includes(fileExtension)) {
+        } else if (fileExtension === "docx") {
           const result = await mammoth.extractRawText({ path: file.filepath });
           text = result.value;
         } else {
